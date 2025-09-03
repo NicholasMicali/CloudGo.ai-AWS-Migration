@@ -1,0 +1,52 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-ci.yml'
+  push:
+    branches: ['main']
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-${ github.ref }
+  cancel-in-progress: true
+
+env:
+  TF_IN_AUTOMATION: 'true'
+  TF_WORKING_DIR: terraform
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform version
+        run: terraform -version
+
+      - name: Init (no backend)
+        working-directory: terraform
+        run: terraform init -backend=false -input=false
+
+      - name: Format check
+        working-directory: terraform
+        run: terraform fmt -check -recursive
+
+      - name: Validate
+        working-directory: terraform
+        run: terraform validate -no-color
+
+      - name: Plan
+        working-directory: terraform
+        run: terraform plan -input=false -refresh=false -lock=false -no-color
