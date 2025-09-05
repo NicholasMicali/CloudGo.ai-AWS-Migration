@@ -1,1 +1,1 @@
-# This is a test update to completely replace the terraform directory
+# This is a test update to completely replace the terraform folder
