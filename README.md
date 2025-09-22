@@ -70,28 +70,7 @@ Click the "Code" button in your repository, choose "Codespaces", and launch a ne
 ---
 
 ## Architecture Diagram
-graph TD
-  subgraph AWS
-    RDS[("Amazon RDS PostgreSQL")]
-    S3["S3 File Storage"]
-    CF["CloudFront CDN"]
-    ACM["ACM SSL"]
-    Amplify["Amplify or S3 Website"]
-    ECS["ECS Fargate Backend"]
-    APIGW["API Gateway"]
-    CW["CloudWatch"]
-  end
-  Amplify --> CF
-  CF --> ACM
-  ECS --> APIGW
-  APIGW --> CF
-  ECS --> RDS
-  ECS --> S3
-  S3 --> CF
-  ECS --> CW
-  RDS --> CW
-  S3 --> CW
-
+![inkdrop](https://github.com/NicholasMicali/CloudGo.ai-AWS-Migration/blob/main/docs/inkdrop-aws.png)
 
 ---
 
